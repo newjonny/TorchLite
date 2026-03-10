@@ -21,7 +21,7 @@ namespace ml
         std::cout << "\nCreate Neural Network";
 
         input_size_ = input_size;
-        for(int i = 0; i < layer_sizes.size(); i++) // layer_sizes.size() is the number of layers in the network
+        for(int i = 0; i < static_cast<int>(layer_sizes.size()); i++) // layer_sizes.size() is the number of layers in the network
         {
             int num_neurons = layer_sizes.at(i);
             // for the first layer, the number of inputs per neuron is the input size,

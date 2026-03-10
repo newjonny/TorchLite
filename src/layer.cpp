@@ -21,6 +21,7 @@ namespace ml
 
     Layer::~Layer()
     {
+        std::cout << "\nDeconstruct Layer";
     }
 
     std::vector<double> Layer::forward(std::vector<double> &inputs, std::string &act_function)
@@ -81,7 +82,7 @@ namespace ml
             std::vector<double> rand_weights_row;
             for(int j = 0; j < num_inputs_per_neuron; j++)
             {
-                double random_weight = dist(gen);
+                const double random_weight = dist(gen);
                 rand_weights_row.push_back(random_weight);
             }
             rand_weights.push_back(rand_weights_row);

@@ -1,5 +1,6 @@
 #include <iostream>
 #include "layer.h"
+#include "nn.h"
 
 int main()
 {
@@ -12,4 +13,7 @@ int main()
     {
         std::cout << output << " ";
     }
+
+    ml::NN nn(4, {3, 2}); // input size 4, first layer with 3 neurons, second layer with 2 neurons
+    return 0;
 }
