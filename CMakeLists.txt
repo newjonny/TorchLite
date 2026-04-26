@@ -9,6 +9,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 add_executable(mlp_network
     src/main.cpp
     src/layer.cpp
+    src/value.cpp
 )
 
 # where to find the header files

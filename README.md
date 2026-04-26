@@ -7,6 +7,7 @@ This project implements the foundational mathematics of neural networks without 
 ## Features
 * **From-Scratch Implementation**: Core logic for the Network and its Layers built using standard C++.
 * **Forward Propagation**: Calculates weighted sums and applies non-linear activation functions (e.g., ReLU).
+* **Automatic Differentiation**: (WIP). Inspired by [Andrej Karpathy's micrograd implementation](https://github.com/karpathy/micrograd).
 
 ## Getting Started
 
