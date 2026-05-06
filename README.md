@@ -10,14 +10,16 @@ This project implements the foundational mathematics of neural networks without 
 * **Automatic Differentiation**: (WIP). Inspired by [Andrej Karpathy's micrograd implementation](https://github.com/karpathy/micrograd).
 
 ## Backpropagation and Automatic Differentiation (WIP)
-In order to train a MLP, we need to tune all parameters within the neutwork: all weights and biases. In supervised learning, we do this based on the error (or _loss_) between the expected output $y$ and the predicted output $\^{y}$. As  This is done using a mechanism called backpropagation.
+1. In order to train a MLP, we need to tune all parameters within the neutwork: all weights and biases. In supervised learning, we do this based on the error (or _loss_) between the expected output $y$ and the predicted output $\hat{y}$.
+2. We use the _loss_ to calculate new values for all parameters by slightly nudging them into the direction of their respective gradient, thus optimizing the 
+3. This is done using a mechanism called backpropagation.
 
-Performing backpropagation within a MLP is challenging because we need to calculate derivates along the entire chain of layers in the network.
+Performing backpropagation within a MLP is challenging because we need to calculate derivates along the entire chain of layers in the network, as is shown below.
 
 ### A quick recap
 
 **What we know**:
-* the error or _loss_ between the last expected output $y$ and the predicted output $\^{y}$ in the last layer
+* the error or _loss_ between the last expected output $y$ and the predicted output $\hat{y}$ in the last layer
 * the current values of weights and biases
 * the (non-)linear activation functions used on raw values (see below)
 
@@ -28,21 +30,6 @@ Performing backpropagation within a MLP is challenging because we need to calcul
 ### How Automatic Differentiation helps and how it's done
 
 **Idea:** Create a graph of all calculations that we are performing through a neural network. This means that - if we consider **one neuron**, it's raw value $z$ and it's activation $a$ - we take all the calculations in the form of $$ x_1 * w_1 + ... + x_n * w_n$$ and create a calculation graph like this:
-
-
-![A simple computational graph of one neuron, two inputs and two weights](mermaid-diagram.png)
-
-By traversing this graph from the end, i.e. $a$, to the front, we can backpropagate our final error (that we know) to tune the individual weights (and biases) to train our MLP.
-
-### In more detail: Starting at the end
-The first derivative $da/da$ is easy to get as it's by definition just $1$. Traversing back from there, we calculate $da/dz$. For this, we take advantage of the already-derived deriatives of our chosen activation function, whis is a $tanh$, which results in:
-$\frac{\partial a}{\partial z} = 1 - \tanh^2(z)$ (cf. [Wikipedia](https://en.wikipedia.org/wiki/Hyperbolic_functions#Derivatives)).
-
-From there, it get's easier again for the next two gradients that we need: $\frac{\partial z}{\partial z1}$ and $\frac{\partial z}{\partial z2}$. As $z = z1 + z2$ is just a simple addition, we'll end up with both local derivatives being $1$.
-
-
-
-Forward pro
 
 ```mermaid
 graph LR
@@ -81,6 +68,21 @@ graph LR
     classDef actOp fill:#FFD166,stroke:#000,color:#000,stroke-width:2px
 
 ```
+**🚧 Note:** Please [click here and view the image of the diagram](mermaid-diagram.png) if you're not viewing this on GitHub.
+
+By traversing this graph from the end, i.e. $a$, to the front, we can backpropagate our final error (that we know) to tune the individual weights (and biases) to train our MLP.
+
+### In more detail: Starting at the end
+1. The first derivative $\frac{\partial a}{\partial a}$ is easy to get as it's by definition just $1$. Traversing back from there, we calculate $\frac{\partial a}{\partial z}$. For this, we take advantage of the already-derived deriatives of our chosen activation function, whis is a $tanh$, which results in:
+$\frac{\partial a}{\partial z} = 1 - \tanh^2(z)$ (cf. [Wikipedia](https://en.wikipedia.org/wiki/Hyperbolic_functions#Derivatives)).
+
+2. From there, it get's easier again for the next two gradients that we need: $\frac{\partial z}{\partial z1}$ and $\frac{\partial z}{\partial z2}$. As $z = z1 + z2$ is just a simple addition, we'll end up with both local derivatives being $1$. Because of the chain rule, we calculate the final derivative for both `+`-nodes to be 0.42 as e.g. the derivative for $z1$ is given by $\frac{\partial a}{\partial z1} = \frac{\partial a}{\partial z}  \frac{\partial z}{\partial z1} = 0.42 * 1$.
+
+3. Now the last step (in this very simple example) is just to take the derivative of e.g. $\frac{\partial a}{\partial w1} = \frac{\partial a}{\partial z}  \frac{\partial z}{\partial z1} \frac{\partial z1}{\partial w1}$ and x1, x2 and w2 respectively. The local derivative $\frac{\partial z1}{\partial w1}$ with $z1 = x1 * w1$ resolves to $\frac{\partial z1}{\partial w1} = x1$. Keeping in mind that we alredy calculated $\frac{\partial a}{\partial z}  \frac{\partial z}{\partial z1} = 0.42$ in the last step, we set the gradient of $w1$ to $\frac{\partial a}{\partial w1} = \frac{\partial a}{\partial z}  \frac{\partial z}{\partial z1} \frac{\partial z1}{\partial w1} = 0.42 * 2 = 0.84$. 
+
+
+
+Forward pro
 
 ## Getting Started
 
@@ -88,7 +90,7 @@ graph LR
 ```bash
 mkdir build
 cd build
-cmake ..
+cmake .
 cmake --build .
 ```
 

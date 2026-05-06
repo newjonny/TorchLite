@@ -26,6 +26,8 @@ namespace ml
             Value operator*(const Value& rhs) const;
             Value operator/(const Value& rhs) const;
 
+            Value tanh() const;
+
             void backward();
 
             // friend gives access to priv members w/o

@@ -52,6 +52,10 @@ void test_value()
     a.grad = 0.5;
     std::cout << "a with grad set: " << a << "\n";
 
+    // apply tanh
+    ml::Value tanh_a = a.tanh();
+    std::cout << "tanh(a): " << tanh_a << "  (expect data=0.964)\n";
+
     // confirm operands were never mutated
     std::cout << "a unchanged: " << a << "  (expect data=2)\n";
     std::cout << "b unchanged: " << b << "  (expect data=5)\n";

@@ -2,6 +2,7 @@
 #include <iostream>
 #include <utility>
 #include <functional>
+#include <cmath>
 
 namespace ml
 {
@@ -16,7 +17,7 @@ namespace ml
     Value::~Value() = default;
 
     // Implement the operator overloads on the data (i.e. doubles)
-    // const as we're not modifying this!
+    // const as we're not modifying *this!
     Value Value::operator+(const Value& rhs) const {
         return Value(this->data + rhs.data, {*this, rhs}, Op::Add, "");
     }
@@ -28,6 +29,11 @@ namespace ml
     }
     Value Value::operator/(const Value& rhs) const {
         return Value(this->data / rhs.data, {*this, rhs}, Op::Div, "");
+    }
+
+    // activation functions
+    Value Value::tanh() const {
+        return Value(std::tanh(this->data), {*this}, Op::Tanh, "");
     }
 
     void Value::backward()
